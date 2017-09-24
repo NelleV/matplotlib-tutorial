@@ -1,4 +1,6 @@
 Icon?
 .DS_Store
 *.pyc
+*.swp
+*.swo
 *~

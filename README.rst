@@ -3,9 +3,9 @@ Matplotlib tutorial
 ===================
 
 
-------------------
-Nicolas P. Rougier
-------------------
+------------------------------------------------------
+adapted from a tutorial authored by Nicolas P. Rougier
+------------------------------------------------------
 
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.28747.svg
    :target: http://dx.doi.org/10.5281/zenodo.28747
@@ -156,9 +156,9 @@ size to make it more horizontal.
 ::
 
    ...
-   plt.figure(figsize=(10,6), dpi=80)
-   plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-")
-   plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-")
+   fig, ax = plt.subplots(figsize=(10,6), dpi=80)
+   ax.plot(X, C, color="blue", linewidth=2.5, linestyle="-")
+   ax.plot(X, S, color="red",  linewidth=2.5, linestyle="-")
    ...
 
 
@@ -182,8 +182,8 @@ in order to clearly see all data points.
 ::
 
    ...
-   plt.xlim(X.min()*1.1, X.max()*1.1)
-   plt.ylim(C.min()*1.1, C.max()*1.1)
+   ax.set_xlim(X.min()*1.1, X.max()*1.1)
+   ax.set_ylim(C.min()*1.1, C.max()*1.1)
    ...
 
 
@@ -210,8 +210,8 @@ these values.
 ::
 
    ...
-   plt.xticks( [-np.pi, -np.pi/2, 0, np.pi/2, np.pi])
-   plt.yticks([-1, 0, +1])
+   ax.set_xticks( [-np.pi, -np.pi/2, 0, np.pi/2, np.pi])
+   ax.set_yticks([-1, 0, +1])
    ...
 
 
@@ -272,7 +272,6 @@ left ones to coordinate 0 in data space coordinates.
 ::
 
    ...
-   ax = plt.gca()
    ax.spines['right'].set_color('none')
    ax.spines['top'].set_color('none')
    ax.xaxis.set_ticks_position('bottom')
@@ -305,10 +304,10 @@ commands.
 ::
 
    ...
-   plt.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosine")
-   plt.plot(X, S, color="red",  linewidth=2.5, linestyle="-", label="sine")
+   ax.plot(X, C, color="blue", linewidth=2.5, linestyle="-", label="cosine")
+   ax.plot(X, S, color="red",  linewidth=2.5, linestyle="-", label="sine")
 
-   plt.legend(loc='upper left', frameon=False)
+   ax.legend(loc='upper left', frameon=False)
    ...
 
 
@@ -336,18 +335,18 @@ the annotate command to display some text with an arrow.
    ...
 
    t = 2*np.pi/3
-   plt.plot([t,t],[0,np.cos(t)], color ='blue', linewidth=1.5, linestyle="--")
-   plt.scatter([t,],[np.cos(t),], 50, color ='blue')
+   ax.plot([t,t],[0,np.cos(t)], color ='blue', linewidth=1.5, linestyle="--")
+   ax.scatter([t,],[np.cos(t),], 50, color ='blue')
 
-   plt.annotate(r'$\sin(\frac{2\pi}{3})=\frac{\sqrt{3}}{2}$',
+   ax.annotate(r'$\sin(\frac{2\pi}{3})=\frac{\sqrt{3}}{2}$',
                 xy=(t, np.sin(t)), xycoords='data',
                 xytext=(+10, +30), textcoords='offset points', fontsize=16,
                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
 
-   plt.plot([t,t],[0,np.sin(t)], color ='red', linewidth=1.5, linestyle="--")
-   plt.scatter([t,],[np.sin(t),], 50, color ='red')
+   ax.plot([t,t],[0,np.sin(t)], color ='red', linewidth=1.5, linestyle="--")
+   ax.scatter([t,],[np.sin(t),], 50, color ='red')
 
-   plt.annotate(r'$\cos(\frac{2\pi}{3})=-\frac{1}{2}$',
+   ax.annotate(r'$\cos(\frac{2\pi}{3})=-\frac{1}{2}$',
                 xy=(t, np.cos(t)), xycoords='data',
                 xytext=(-90, -50), textcoords='offset points', fontsize=16,
                 arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
@@ -848,12 +847,13 @@ care of filled areas::
    n = 256
    X = np.linspace(-np.pi,np.pi,n,endpoint=True)
    Y = np.sin(2*X)
-
-   plt.plot (X, Y+1, color='blue', alpha=1.00)
-   plt.plot (X, Y-1, color='blue', alpha=1.00)
+  
+   fig, ax = plt.subplots()
+   ax.plot(X, Y+1, color='blue', alpha=1.00)
+   ax.plot(X, Y-1, color='blue', alpha=1.00)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -881,10 +881,11 @@ care of marker size, color and transparency.
    X = np.random.normal(0,1,n)
    Y = np.random.normal(0,1,n)
 
-   plt.scatter(X,Y)
+   fig, ax = plt.subplots()
+   ax.scatter(X,Y)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -914,16 +915,17 @@ adding labels for red bars.
    Y1 = (1-X/float(n)) * np.random.uniform(0.5,1.0,n)
    Y2 = (1-X/float(n)) * np.random.uniform(0.5,1.0,n)
 
-   plt.bar(X, +Y1, facecolor='#9999ff', edgecolor='white')
-   plt.bar(X, -Y2, facecolor='#ff9999', edgecolor='white')
+   fig, ax = plt.subplots()
+   ax.bar(X, +Y1, facecolor='#9999ff', edgecolor='white')
+   ax.bar(X, -Y2, facecolor='#ff9999', edgecolor='white')
 
    for x,y in zip(X,Y1):
-       plt.text(x+0.4, y+0.05, '%.2f' % y, ha='center', va= 'bottom')
+       ax.text(x+0.4, y+0.05, '%.2f' % y, ha='center', va= 'bottom')
 
-   plt.ylim(-1.25,+1.25)
+   ax.set_ylim(-1.25,+1.25)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 Contour Plots
@@ -947,18 +949,20 @@ care of the colormap (see `Colormaps`_ below).
    import numpy as np
    import matplotlib.pyplot as plt
 
-   def f(x,y): return (1-x/2+x**5+y**3)*np.exp(-x**2-y**2)
+   def f(x,y):
+      return (1-x/2+x**5+y**3)*np.exp(-x**2-y**2)
 
    n = 256
    x = np.linspace(-3,3,n)
    y = np.linspace(-3,3,n)
    X,Y = np.meshgrid(x,y)
 
-   plt.contourf(X, Y, f(X,Y), 8, alpha=.75, cmap='jet')
-   C = plt.contour(X, Y, f(X,Y), 8, colors='black', linewidth=.5)
+   fig, ax = plt.subplots()
+   ax.contourf(X, Y, f(X,Y), 8, alpha=.75, cmap='jet')
+   C = ax.contour(X, Y, f(X,Y), 8, colors='black', linewidth=.5)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -990,10 +994,12 @@ care of colormap, image interpolation and origin.
    x = np.linspace(-3,3,4*n)
    y = np.linspace(-3,3,3*n)
    X,Y = np.meshgrid(x,y)
-   plt.imshow(f(X,Y))
+
+   fig, ax = plt.subplots()
+   ax.imshow(f(X,Y))
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 Pie Charts
@@ -1017,10 +1023,12 @@ care of colors and slices size.
 
    n = 20
    Z = np.random.uniform(0,1,n)
-   plt.pie(Z)
+
+   fig, ax = plt.subplots()
+   ax.pie(Z)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -1045,10 +1053,12 @@ care of colors and orientations.
 
    n = 8
    X,Y = np.mgrid[0:n,0:n]
-   plt.quiver(X,Y)
+
+   fig, ax = plt.subplots()
+   ax.quiver(X,Y)
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -1068,15 +1078,15 @@ care of line styles.
    import numpy as np
    import matplotlib.pyplot as plt
 
-   axes = gca()
-   axes.set_xlim(0,4)
-   axes.set_ylim(0,3)
-   axes.set_xticklabels([])
-   axes.set_yticklabels([])
+   fig, ax = plt.subplots()
+   ax.set_xlim(0,4)
+   ax.set_ylim(0,3)
+   ax.set_xticklabels([])
+   ax.set_yticklabels([])
 
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 Multi Plots
@@ -1104,7 +1114,7 @@ Starting from the code below, try to reproduce the graphic on the right.
 
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 Polar Axis
@@ -1140,7 +1150,7 @@ Starting from the code below, try to reproduce the graphic on the right.
 
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 3D Plots
@@ -1176,7 +1186,7 @@ Starting from the code below, try to reproduce the graphic on the right.
 
    plt.show()
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 
@@ -1194,7 +1204,7 @@ Text
 
 Try to do the same from scratch !
 
-Click on figure for solution.
+.. Click on figure for solution.
 
 
 Beyond this tutorial
